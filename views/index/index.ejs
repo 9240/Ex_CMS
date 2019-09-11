@@ -7,33 +7,20 @@
   <% include ../header/header.ejs %>
   <div class="container-fluid bg-muted">
     <div class="container">
-      <div id="demo" class="carousel slide pt-4" data-ride="carousel">
-      <!-- 指示符 -->
-      <ul class="carousel-indicators">
-        <li data-target="#demo" data-slide-to="0" class="active"></li>
-        <li data-target="#demo" data-slide-to="1"></li>
-        <li data-target="#demo" data-slide-to="2"></li>
-      </ul>
-      <!-- 轮播图片 -->
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img style="height: 400px;min-width: 1000px;" src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
-        </div>
-        <div class="carousel-item">
-          <img style="height: 400px;min-width: 1000px;" src="https://static.runoob.com/images/mix/img_nature_wide.jpg">
-        </div>
-        <div class="carousel-item">
-          <img style="height: 400px;min-width: 1000px;" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+      <div id="demo" data-interval=2000 class="carousel slide pt-4 carousel-fade" data-ride="carousel">
+        <ul class="carousel-indicators">
+          <% for(let i in carousel){ %>
+            <li data-target="#demo" data-slide-to="<%= i%>"></li>
+          <% } %>
+        </ul>
+        <div class="carousel-inner">
+          <% for(let i in carousel){ %>
+            <div class="carousel-item">
+              <img style="width: 100vw;height: 400px;min-width: 1000px;" src="<%=carousel[i].url%>">
+            </div>
+          <% } %>
         </div>
       </div>
-      <!-- 左右切换按钮 -->
-      <a class="carousel-control-prev" href="#demo" data-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </a>
-      <a class="carousel-control-next" href="#demo" data-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </a>
-    </div>
       <h1 class="text-muted pt-2 pb-1">新闻动态</h1>
       <div class="row">
         <div class="col-6">
@@ -68,3 +55,9 @@
   <% include ../footer/footer.ejs %>
 </body>
 </html>
+<script>
+  $(function(){
+    $(".carousel-inner div").first().addClass("active")
+    $(".carousel-indicators li").first().addClass("active")
+  })
+</script>

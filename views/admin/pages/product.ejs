@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../../lib/bootstrap.v4.ejs %>
+  </head>
+  <body>
+    <% include ../../header/adminHeader.ejs %>
+    <div class="container">
+      <h2 class="text-center p-4">产品</h2>
+      <button class="btn btn-primary float-right mb-2" onclick="add()">添加</button>
+      <table class="table table-hover text-center table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">序号</th>
+            <th scope="col">id</th>
+            <th scope="col">所属分类</th>
+            <th scope="col">产品名</th>
+            <th scope="col">图片</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i in product){ %>
+            <tr>
+              <th scope="row"><%= Number(i)+1%></th>
+              <td><%=product[i].id %></td>
+              <td><%=product[i].cateName %></td>
+              <td><%=product[i].proName %></td>
+              <td>
+                <img src="<%=product[i].proImg %>" alt="" style="width: 30px;height:30px;">
+              </td>
+              <td>
+                <button class="btn btn-info" onclick="edit('<%=product[i].id %>','<%=product[i].cate_id %>','<%=product[i].proName %>','<%=product[i].proDesc %>')">编辑</button>
+                <button class="btn btn-danger" onclick="del('<%=product[i].id %>')">删除</button>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
+<!-- 模态框 -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          <!-- 模态框标题 -->
+        </h4>
+        <input type="hidden" name="id" id="proId">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form enctype="multipart/form-data" id="proForm">
+          <div class="form-group row">
+            <label for="proTitle" class="col-sm-2 col-form-label text-center">标题:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="proTitle" placeholder="请输入新闻标题">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="proCate" class="col-sm-2 col-form-label text-center">分类:</label>
+            <div class="col-sm-10">
+              <select class="form-control" id="proCate">
+                <option value="0">————请选择————</option>
+                <% for(let item in proCate){ %>
+                <option value="<%=proCate[item].id %>"><%=proCate[item].category %></option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="proImg" class="col-sm-2 col-form-label text-center">图片:</label>
+            <div class="col-sm-10">
+              <input type="file" class="form-control" id="proImg" placeholder="请选择图片" accept="image/*">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="proContent" class="col-sm-2 col-form-label text-center">内容:</label>
+            <div class="col-sm-10">
+              <textarea rows="10" class="form-control" id="proContent"></textarea>
+            </div>
+          </div>
+        </form>
+        <button class="btn btn-primary float-right" id="commit">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function edit(id,cate_id,proName,proDesc){
+    $(".modal-title").text("编辑产品")
+    $("#myModal").modal('show');
+    $("#proId").val(id)
+    $("#proTitle").val(proName)
+    $("#proCate").val(cate_id)
+    $("#proContent").val(proDesc)
+  }
+  function add(){
+    document.querySelector("#proForm").reset()
+    $("#proId").val(null)
+    $(".modal-title").text("添加产品")
+    $("#myModal").modal('show');
+  }
+  function del(id){
+    $.ajax({
+      url: '/admin/delPro',
+      type:'post',
+      data: {id:id},
+      success: function(data){
+        if(data.code == 200){
+          location.reload();
+        }
+      },
+      error:function(){
+        alert("删除失败")
+      }
+    })
+  }
+  $(function(){
+    $("#commit").click(function(e){
+      e.preventDefault();
+      var fileList = $('#proImg')[0].files;
+      var formData = new FormData();
+      formData.append('proImg', fileList[0]);
+      if($("#proTitle").val() == "" || $("#proCate").val() == "0" || $("#proContent").val() == ""){
+        return false;
+      }
+      formData.append('pro',JSON.stringify({
+        proTitle:$("#proTitle").val(),
+        proCate:$("#proCate").val(),
+        proContent:$("#proContent").val(),
+        id:$("#proId").val()
+      }));
+      $.ajax({
+        url: $("#proId").val()?'/admin/editPro':'/admin/addPro',
+        type:'post',
+        processData:false,
+        contentType:false,
+        data: formData,
+        success: function(data){
+          if(data.code == 200){
+            location.reload();
+          }
+        },
+        error:function(){
+          alert($("#proId").val()?"编辑失败":"添加失败")
+        }
+      })
+    })
+  })
+</script>

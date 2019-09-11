@@ -55,7 +55,7 @@
     if('<%=currentPage %>' == 1 ){
       $(".pagination li").first().addClass("disabled")
     }
-    if('<%=currentPage %>' == '<%=Math.floor(total/size+1) %>'){
+    if('<%=currentPage %>' == '<%=Math.ceil(total/size) %>'){
       $(".pagination li").last().addClass("disabled")
     }
     for(let i = 0;i<$(".pagination .pageSign").length;i++){
