@@ -8,7 +8,7 @@ $(function(){
     $(".navbar .navbar-nav li").eq(nav.indexOf(location.pathname.split('/')[1])).css("border-bottom","3px solid #0303ec")
   }
   //底部是否固定定位
-  if($(window).height()>($("body > .container").height()+$("body > .bg-muted").height()+$("body > .bg-footer").height())){
+  if($(window).height()>($("body > .container-fluid").first().height()+$("body > .bg-muted").height()+$("body > .bg-footer").height())){
     $("#footer").addClass("fixed-bottom")
   }
   // $(".nav-item").hover(function () {
