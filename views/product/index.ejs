@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../lib/bootstrap.v4.ejs %>
+  </head>
+  <body>
+    <% include ../header/header.ejs %>
+    <div class="container-fluid bg-muted pb-3">
+      <div class="mt-0">&nbsp;</div>
+      <div class="container p-4">
+        <hr>
+        <div class="row">
+          <div class="col-2">
+            <div class="list-group" id="proCate">
+              <% for(let i = 0;i < cateList.length;i++){ %>
+                <a href="/product?id=<%=cateList[i].id%>" class="a_hover list-group-item">
+                  <%= cateList[i].category%>
+                </a>
+              <% } %>
+            </div>
+          </div>
+          <% if(isProList){ %>
+            <div class="col-10">
+              <% if(proList.length > 0){ %>
+                <% for(var i = 0;i<proList.length;i++){ %>
+                <a href="/product/proDetail?id=<%=proList[i].id %>" id="content" >
+                  <div class="media border mt-1 p-2">
+                    <img class="mr-3" src="<%=proList[i].proImg %>" alt="Generic placeholder image" style="width: 318px;height:210px;">
+                    <div class="media-body">
+                      <h5 class="mt-0"><%=proList[i].proName %></h5>
+                      <small><%-proList[i].proDesc.slice(0,80) %></small>
+                    </div>
+                  </div>
+                </a>
+                <% } %>
+              <% }else{ %>
+                <h2 class="text-muted text-center p-2">该分类暂无产品</h2>
+              <% } %>
+            </div>
+          <% }else{ %>
+            <div class="col-10" style="background-color: white;">
+              <h4 class="text-center text-muted pt-2 pb-1"><%=proDetail[0].proName %></h4>
+              <hr>
+              <%-proDetail[0].proDesc %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% include ../footer/footer.ejs %>
+  </body>
+</html>
+<script>
+  $("#proCate a").map((index,item)=>{
+    if($(item).attr("href").split("=")[1] == location.search.split("=")[1]){
+      $($("#proCate a")[index]).addClass("active")
+    }
+  })
+</script>

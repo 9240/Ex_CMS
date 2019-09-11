@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../lib/bootstrap.v4.ejs %>
+</head>
+<body>
+  <% include ../header/header.ejs %>
+  <div class="container-fluid bg-muted pb-3">
+    <div class="mt-0">&nbsp;</div>
+    <div class="container bg-white p-4">
+      <h4 class="text-center text-muted pt-2 pb-1"><%=singleNews[0].title %></h4>
+      <p class="text-center small"><%=new Date(singleNews[0].date).getFullYear()%>-<%=new Date(singleNews[0].date).getMonth()+1%>-<%=new Date(singleNews[0].date).getDate()%></p>
+      <hr>
+      <div class="media">
+        <div class="media-body">
+          <p><%-singleNews[0].content %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% include ../footer/footer.ejs %>
+</body>
+</html>
