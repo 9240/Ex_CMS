@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../../lib/bootstrap.v4.ejs %>
+  </head>
+  <body>
+    <% include ../../header/adminHeader.ejs %>
+    <div class="container">
+      <h2 class="text-center p-4">轮播图</h2>
+      <button class="btn btn-primary float-right mb-2" onclick="add()">添加</button>
+      <table class="table table-hover text-center table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">序号</th>
+            <th scope="col">id</th>
+            <th scope="col">图片</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i in carousel){ %>
+            <tr>
+              <th scope="row"><%= Number(i)+1%></th>
+              <td><%=carousel[i].id %></td>
+              <td>
+                <img src="<%=carousel[i].url %>" alt="" style="width: 30px;height:30px;">
+              </td>
+              <td>
+                <button class="btn btn-danger" onclick="del('<%=carousel[i].id %>')">删除</button>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
+
+<!-- 模态框 -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          添加轮播图图片
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form enctype="multipart/form-data" id="carouselForm">
+          <div class="form-group row">
+            <label for="img" class="col-sm-2 col-form-label text-center">图片:</label>
+            <div class="col-sm-10">
+              <input type="file" class="form-control" id="img" placeholder="请选择图片" accept="image/*">
+            </div>
+          </div>
+        </form>
+        <button class="btn btn-primary float-right" id="commit">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function add(){
+    $("#myModal").modal('show');
+  }
+  function del(id){
+    $.ajax({
+      url: '/admin/delCarousel',
+      type:'post',
+      data: {id:id},
+      success: function(data){
+        if(data.code == 200){
+          location.reload();
+        }
+      },
+      error:function(){
+        alert("删除失败")
+      }
+    })
+  }
+  $(function(){
+    $("#commit").click(function(e){
+      e.preventDefault();
+      var fileList = $('#img')[0].files;
+      var formData = new FormData();
+      formData.append('img', fileList[0]);
+      $.ajax({
+        url: '/admin/addCarousel',
+        type:'post',
+        processData:false,
+        contentType:false,
+        data: formData,
+        success: function(data){
+          if(data.code == 200){
+            location.reload();
+          }
+        },
+        error:function(){
+          
+        }
+      })
+    })
+  })
+</script>

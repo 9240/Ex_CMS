@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../../lib/bootstrap.v4.ejs %>
+  </head>
+  <body>
+    <% include ../../header/adminHeader.ejs %>
+    <div class="container">
+      <div class="container-fluid">
+          <h2 class="text-center p-4">产品分类</h2>
+          <button class="btn btn-primary float-right mb-2" onclick="add()">添加</button>
+          <table class="table table-hover text-center table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">序号</th>
+                <th scope="col">id</th>
+                <th scope="col">分类名</th>
+                <th scope="col">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let i in proCate){ %>
+                <tr>
+                  <th scope="row"><%= Number(i)+1%></th>
+                  <td><%=proCate[i].id %></td>
+                  <td><%=proCate[i].category %></td>
+                  <td>
+                    <button class="btn btn-info" onclick="edit('<%=proCate[i].id %>','<%=proCate[i].category %>')">编辑</button>
+                    <button class="btn btn-danger" onclick="del('<%=proCate[i].id %>')">删除</button>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </body>
+</html>
+<!-- 模态框 -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          <!-- 模态框标题 -->
+        </h4>
+        <input type="hidden" name="id" id="cateId">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+          <label for="category" class="col-sm-2 col-form-label text-center">分类名:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="category" placeholder="请输入分类名">
+          </div>
+        </div>
+        <button class="btn btn-primary float-right" id="commit">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function edit(id,category){
+    $(".modal-title").text("编辑分类")
+    $("#myModal").modal('show');
+    $("#category").val(category)
+    $("#cateId").val(id)
+  }
+  function add(){
+    $(".modal-title").text("添加分类")
+    $("#myModal").modal('show');
+  }
+  function del(id){
+    $.ajax({
+      url: '/admin/delCate',
+      type:'post',
+      data: {id:id},
+      success: function(data){
+        if(data.code == 200){
+          location.reload();
+        }
+      },
+      error:function(){
+        alert("删除失败")
+      }
+    })
+  }
+  $(function(){
+    $("#commit").click(function(){
+      $.ajax({
+        url: $("#cateId").val()?'/admin/editCate':'/admin/addCate',
+        type:'post',
+        data: {id:$("#cateId").val(),category:$("#category").val()},
+        success: function(data){
+          if(data.code == 200){
+            location.reload();
+          }
+        },
+        error:function(){
+          alert($("#cateId").val()?"编辑失败":"添加失败")
+        }
+      })
+    })
+  })
+</script>
