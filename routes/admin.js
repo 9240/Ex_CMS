@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
+var path = require('path')
 var multer = require('multer');
 var db = require('../db/index')
 //文件上传的配置
@@ -107,12 +109,14 @@ router.post('/addCarousel',upload.single('img'), (req,res)=>{
   });
 });
 //——————————————————————————————————————————删除轮播图————————————————————————————————————————
-//单个文件上传
 router.post('/delCarousel',(req,res)=>{
   db.connection.query(`delete from zn_carousel where id = ${req.body.id}`,function (error, results) {
     if (error) throw error;
-    res.json({
-      code:200,
+    fs.unlink(path.join(__dirname,"..",`/public/files/${req.body.fileName}`),(err)=>{
+      if(err) throw err;
+      res.json({
+        code:200,
+      })
     })
   });
 });
@@ -128,12 +132,15 @@ router.post('/addNews',upload.array('img'), (req,res)=>{
   });
 });
 //——————————————————————————————————————————删除新闻————————————————————————————————————————
-router.post('/delNews',upload.array('img'), (req,res)=>{
+router.post('/delNews', (req,res)=>{
   db.connection.query(`delete from zn_news where id = ${req.body.id}`,function (error, results) {
     if (error) throw error;
-    res.json({
-      code:200,
-      msg:"添加成功"
+    fs.unlink(path.join(__dirname,"..",`/public/files/${req.body.fileName}`),(err)=>{
+      if(err) throw err;
+      res.json({
+        code:200,
+        msg:"删除成功"
+      })
     })
   });
 });
@@ -197,8 +204,11 @@ router.post('/editPro',upload.array('proImg'), (req,res)=>{
 router.post('/delPro', (req,res,next)=>{
   db.connection.query(`delete from zn_pro where id=${req.body.id}`,function (error, results) {
     if (error) throw error;
-    res.json({
-      code:200,
+    fs.unlink(path.join(__dirname,"..",`/public/files/${req.body.fileName}`),(err)=>{
+      if(err) throw err;
+      res.json({
+        code:200,
+      })
     })
   });
 });

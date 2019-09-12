@@ -96,6 +96,10 @@
   }
   $(function(){
     $("#commit").click(function(){
+      if(!$("#category").val()){
+        $('#category').css('border',"1px solid red")
+        return false;
+      }
       $.ajax({
         url: $("#cateId").val()?'/admin/editCate':'/admin/addCate',
         type:'post',

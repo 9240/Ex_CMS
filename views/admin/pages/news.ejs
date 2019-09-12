@@ -29,7 +29,7 @@
               </td>
               <td>
                 <button class="btn btn-info" onclick="edit('<%=newsList[i].id %>','<%=newsList[i].title %>','<%=new Date(newsList[i].date).getFullYear()%>-<%=new Date(newsList[i].date).getMonth()+1%>-<%=new Date(newsList[i].date).getDate() %>','<%=newsList[i].img %>','<%=newsList[i].content %>')">编辑</button>
-                <button class="btn btn-danger" onclick="del('<%=newsList[i].id %>')">删除</button>
+                <button class="btn btn-danger" onclick="del('<%=newsList[i].id %>','<%=newsList[i].img %>')">删除</button>
               </td>
             </tr>
           <% } %>
@@ -98,11 +98,11 @@
     $(".modal-title").text("添加新闻")
     $("#myModal").modal('show');
   }
-  function del(id){
+  function del(id,fileUrl){
     $.ajax({
       url: '/admin/delNews',
       type:'post',
-      data: {id:id},
+      data: {id:id,fileName:fileUrl.split("/")[2]},
       success: function(data){
         if(data.code == 200){
           location.reload();
@@ -119,11 +119,16 @@
       var fileList = $('#img')[0].files;
       var formData = new FormData();
       formData.append('img', fileList[0]);
-      $('#Tip').show()
-      if($("#title").val() == "" || $("#date").val() == "" || $("#newsContent").val() == ""){
-        $("#Tip").text("请完善信息").addClass("alert-danger").fadeOut(3000,()=>{
-          $("#Tip").removeClass("alert-danger").text("")
-        })
+      if($("#title").val() == ""){
+        $("#title").css('border',"1px solid red")
+        return false;
+      }
+      if($("#date").val() == ""){
+        $("#date").css('border',"1px solid red")
+        return false;
+      }
+      if($("#newsContent").val() == ""){
+        $("#newsContent").css('border',"1px solid red")
         return false;
       }
       formData.append('news',JSON.stringify({

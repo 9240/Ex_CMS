@@ -5,7 +5,7 @@ var connection = mysql.createConnection({
   port : 3306,
   user : 'root',
   password : '32873287',
-  database : '9240'
+  database : 'zniot'
 });
 
 connection.connect();

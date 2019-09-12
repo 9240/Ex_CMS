@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
     if (error) throw error;
     db.connection.query(`select count(*) from zn_news`, function (error, resTot, fields) {
       if (error) throw error;
+      console.log(resData)
       res.render('news/index',{newsList:resData,total:resTot[0]['count(*)'],currentPage:page,size:size});
     });
   });

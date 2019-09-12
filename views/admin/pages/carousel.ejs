@@ -24,7 +24,7 @@
                 <img src="<%=carousel[i].url %>" alt="" style="width: 30px;height:30px;">
               </td>
               <td>
-                <button class="btn btn-danger" onclick="del('<%=carousel[i].id %>')">删除</button>
+                <button class="btn btn-danger" onclick="del('<%=carousel[i].id %>','<%=carousel[i].url %>')">删除</button>
               </td>
             </tr>
           <% } %>
@@ -62,11 +62,11 @@
   function add(){
     $("#myModal").modal('show');
   }
-  function del(id){
+  function del(id,fileUrl){
     $.ajax({
       url: '/admin/delCarousel',
       type:'post',
-      data: {id:id},
+      data: {id:id,fileName:fileUrl.split("/")[2]},
       success: function(data){
         if(data.code == 200){
           location.reload();
@@ -80,6 +80,11 @@
   $(function(){
     $("#commit").click(function(e){
       e.preventDefault();
+      console.log($('#img')[0].files.length)
+      if($('#img')[0].files.length == 0){
+        $('#img').css('border',"1px solid red")
+        return false;
+      }
       var fileList = $('#img')[0].files;
       var formData = new FormData();
       formData.append('img', fileList[0]);

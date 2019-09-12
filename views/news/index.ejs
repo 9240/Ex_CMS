@@ -9,41 +9,45 @@
     <div class="mt-0">&nbsp;</div>
     <div class="container bg-white">
       <h1 class="text-muted pt-2 pb-1">新闻动态</h1>
-      <% for(var i = 0;i<newsList.length;i++){ %>
-      <hr>
-      <a href="/news/singleNews?id=<%=newsList[i].id %>" id="content">
-        <div class="media">
-          <img class="mr-3" src="<%=newsList[i].img %>" alt="Generic placeholder image"  style="width: 318px;height:210px;">
-          <div class="media-body">
-            <h5 class="mt-0"><%=newsList[i].title %></h5>
-            <small><%-newsList[i].content.slice(0,300) %>...</small>
-            <p>
-              <small><%=new Date(newsList[i].date).getFullYear()%>-<%=new Date(newsList[i].date).getMonth()+1%>-<%=new Date(newsList[i].date).getDate()%></small>
-            </p>
+      <% if(newsList.length>0){ %>
+        <% for(var i = 0;i<newsList.length;i++){ %>
+        <hr>
+        <a href="/news/singleNews?id=<%=newsList[i].id %>" id="content">
+          <div class="media">
+            <img class="mr-3" src="<%=newsList[i].img %>" alt="Generic placeholder image"  style="width: 318px;height:210px;">
+            <div class="media-body">
+              <h5 class="mt-0"><%=newsList[i].title %></h5>
+              <small><%-newsList[i].content.slice(0,300) %>...</small>
+              <p>
+                <small><%=new Date(newsList[i].date).getFullYear()%>-<%=new Date(newsList[i].date).getMonth()+1%>-<%=new Date(newsList[i].date).getDate()%></small>
+              </p>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+        <% } %>
+        <hr>
+        <nav aria-label="Page navigation" class="pb-1">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="/news?page=<%=currentPage-1 %>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <% for(let i = 1;i<total/size+1;i++){ %>
+            <li class="page-item pageSign"><a class="page-link" href="/news?page=<%=i%>"><%=i %></a></li>
+            <% } %>
+            <li class="page-item">
+              <a class="page-link" href="/news?page=<%=Number(currentPage)+1 %>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      <% }else{ %>
+        <h2 class="text-center text-muted pb-5">暂无新闻</h2>
       <% } %>
-      <hr>
-      <nav aria-label="Page navigation" class="pb-1">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="/news?page=<%=currentPage-1 %>" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <% for(let i = 1;i<total/size+1;i++){ %>
-          <li class="page-item pageSign"><a class="page-link" href="/news?page=<%=i%>"><%=i %></a></li>
-          <% } %>
-          <li class="page-item">
-            <a class="page-link" href="/news?page=<%=Number(currentPage)+1 %>" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
     </div>
     <div class="mt-1">&nbsp;</div>
   </div>

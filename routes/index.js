@@ -7,7 +7,6 @@ router.get('/', function(req, res, next) {
     if (error) throw error;
     db.connection.query(`select * from zn_carousel`, function (error, resCarousel, fields) {
       if (error) throw error;
-      console.log(resCarousel)
       res.render('index/index',{newsList:resNews,carousel:resCarousel});
     });
   });
