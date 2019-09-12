@@ -12,7 +12,6 @@
         <thead>
           <tr>
             <th scope="col">序号</th>
-            <th scope="col">id</th>
             <th scope="col">标题</th>
             <th scope="col">日期</th>
             <th scope="col">图片</th>
@@ -23,8 +22,7 @@
           <% for(let i in newsList){ %>
             <tr>
               <th scope="row"><%= Number(i)+1%></th>
-              <td><%=newsList[i].id %></td>
-              <td class="text-left"><%=newsList[i].title %></td>
+              <td class="text-left"><%=newsList[i].title.length>10?newsList[i].title.slice(0,20)+"...":newsList[i].title %></td>
               <td><%=new Date(newsList[i].date).getFullYear()%>-<%=(new Date(newsList[i].date).getMonth()+1)<10?"0"+(new Date(newsList[i].date).getMonth()+1):new Date(newsList[i].date).getMonth()+1%>-<%=(new Date(newsList[i].date).getDate())<10?"0"+new Date(newsList[i].date).getDate():new Date(newsList[i].date).getDate()%></td>
               <td>
                 <img src="<%=newsList[i].img %>" alt="" style="width: 30px;height:30px;">
@@ -146,7 +144,9 @@
           }
         },
         error:function(){
-          
+          $("#Tip").text("添加失败").addClass("alert-danger").fadeOut(3000,()=>{
+            $("#Tip").removeClass("alert-danger").text("")
+          })
         }
       })
     })

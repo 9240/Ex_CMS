@@ -61,7 +61,6 @@ router.get('/product', function(req, res, next) {
           }
         }
       }
-      console.log(resultsPro)
       res.render('admin/pages/product',{product:resultsPro,proCate:resultsCate});
     });
   });
@@ -214,11 +213,23 @@ router.post('/editCate',(req,res,next)=>{
 })
 //——————————————————————————————————————————删除分类————————————————————————————————————————
 router.post('/delCate',(req,res,next)=>{
-  db.connection.query(`delete from zn_category where id = ${req.body.id}`,function (error, results) {
+  db.connection.query(`select * from zn_pro where cate_id = ${req.body.id}`,function (error, results) {
     if (error) throw error;
-    res.json({
-      code:200
-    })
+    if(results.length>0){
+      res.json({
+        code:400,
+        msg:"该分类下有商品,请先转移或删除商品"
+      })
+    }else{
+      db.connection.query(`delete from zn_category where id = ${req.body.id}`,function (error, results) {
+        if (error) throw error;
+        res.json({
+          code:200,
+          msg:"删除成功"
+        })
+      });
+    }
   });
+  
 })
 module.exports = router;

@@ -7,10 +7,16 @@ $(function(){
     console.log(location.pathname.split('/')[1])
     $(".navbar .navbar-nav li").eq(nav.indexOf(location.pathname.split('/')[1])).css("border-bottom","3px solid #0303ec")
   }
-  //底部是否固定定位
-  if($(window).height()>($("body > .container-fluid").first().height()+$("body > .bg-muted").height()+$("body > .bg-footer").height())){
-    $("#footer").addClass("fixed-bottom")
+  //内容高度不够时的处理
+  function winSize(){
+    if($(window).height()>($("body > .container-fluid").first().height()+$("body > .bg-muted").height()+$("body > .bg-footer").height())){
+      $("body > .bg-muted").height($(window).height()-$("body > .container-fluid").first().height()-$("body > .bg-footer").height()-16)
+    }
   }
+  winSize()
+  $(window).resize(function () {
+    winSize()
+  });
   // $(".nav-item").hover(function () {
   //     // over
   //     $(this).css("border-bottom","3px solid #0303ec")

@@ -7,13 +7,15 @@
     <% include ../../header/adminHeader.ejs %>
     <div class="container">
       <div class="container-fluid">
+          <div class="alert mt-2" role="alert" id="Tip" style="display: none;">
+            <!-- 提示内容 -->
+          </div>
           <h2 class="text-center p-4">产品分类</h2>
           <button class="btn btn-primary float-right mb-2" onclick="add()">添加</button>
           <table class="table table-hover text-center table-bordered">
             <thead>
               <tr>
                 <th scope="col">序号</th>
-                <th scope="col">id</th>
                 <th scope="col">分类名</th>
                 <th scope="col">操作</th>
               </tr>
@@ -22,7 +24,6 @@
               <% for(let i in proCate){ %>
                 <tr>
                   <th scope="row"><%= Number(i)+1%></th>
-                  <td><%=proCate[i].id %></td>
                   <td><%=proCate[i].category %></td>
                   <td>
                     <button class="btn btn-info" onclick="edit('<%=proCate[i].id %>','<%=proCate[i].category %>')">编辑</button>
@@ -78,10 +79,18 @@
       success: function(data){
         if(data.code == 200){
           location.reload();
+        }else if(data.code == 400){
+          $('#Tip').show()
+          $("#Tip").addClass("alert-danger");
+          $("#Tip").text(data.msg)
+          $('#Tip').fadeOut(5000)
         }
       },
       error:function(){
-        alert("删除失败")
+        $('#Tip').show()
+        $("#Tip").addClass("alert-danger");
+        $("#Tip").text("删除失败")
+        $('#Tip').fadeOut(5000)
       }
     })
   }
@@ -97,7 +106,10 @@
           }
         },
         error:function(){
-          alert($("#cateId").val()?"编辑失败":"添加失败")
+          $('#Tip').show()
+          $("#Tip").addClass("alert-danger");
+          $("#Tip").text($("#cateId").val()?"编辑失败":"添加失败")
+          $('#Tip').fadeOut(5000)
         }
       })
     })
